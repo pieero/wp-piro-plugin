@@ -1,0 +1,26 @@
+{
+  "name": "piroplugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "start": "wp-scripts start",
+    "packages-update": "wp-scripts packages-update",
+    "start:agenda": "wp-scripts start blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
+    "build:agenda": "wp-scripts build blocks/agenda/src/index.js --output-path=blocks/agenda/build/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wordpress/block-editor": "^12.4.0",
+    "@wordpress/blocks": "^12.13.0",
+    "@wordpress/i18n": "^4.36.0",
+    "@wordpress/scripts": "^26.7.0",
+    "dateformat": "^5.0.3",
+    "he": "^1.2.0"
+  }
+}

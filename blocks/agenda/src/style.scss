@@ -1,0 +1,77 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-multiple-blocks-plugin-buy-button {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.agenda_controls {
+	position: absolute;
+	background-color: grey;
+	width: 50%;
+	right: 0px;
+	border-bottom-left-radius: 10px;
+	label {
+		vertical-align: top;
+		margin-left: 5px;
+	}
+}
+
+[data-type="piro-plugin/agenda"] .vue-mounted,
+.wp-block-piro-plugin-agenda .vue-mounted#mount  {
+	h1 {
+		font-size: 22px;
+		font-weight: bold;
+		font-variant: small-caps;
+	}
+
+	h2 {
+		font-size: 20px;
+		font-weight: bold;
+		font-variant: small-caps;
+		margin: 0px 20px;
+	}
+
+	ul {
+		--icon-space: 1.3em;
+		list-style: none;
+		padding: 0;
+	}
+	
+	li {
+		padding-left: var(--icon-space);
+		line-height: 16px;
+		margin-top: 27px;
+
+		span {
+			font-size: 18px;
+			font-weight: bold;
+			display: inline-block;
+			margin-top: -6px;
+
+			span.description {
+				font-weight: lighter;
+				font-style: italic;
+			}
+		}
+
+		
+	}
+
+	li:before {
+		content: "\f058"; /* FontAwesome Unicode */
+		color: #21759b;
+		font-size: 32px;
+		font-family: FontAwesome;
+		display: inline-block;
+		margin-left: calc( var(--icon-space) * -1 );
+		width: var(--icon-space);
+		vertical-align: top;
+	  }
+}
