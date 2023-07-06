@@ -77,6 +77,9 @@ Vue.component("Countdown", {
                 this.hours = edate.diff(now, "hours") - 24*this.days ;
                 this.minutes = edate.diff(now, "minutes") - 60*(24*this.days + this.hours);
                 this.seconds = edate.diff(now, "seconds") - 60*(60*(24*this.days + this.hours) + this.minutes) ;
+                if(edate.diff(now, "seconds") == -1) {
+                    this.fetchNextEvent();
+                }
             }
         },
         matchTag(event) {
@@ -92,27 +95,35 @@ Vue.component("Countdown", {
                 return false;
             }
             return true;
+        },
+        fetchNextEvent() {
+            var mnow = moment();
+            var hier = moment().subtract(1, "days").format("YYYY-MM-DD");
+            var maintenant = mnow.format("YYYY-MM-DD HH:mm:ss");
+            var url = '/wp-json/tribe/events/v1/events?starts_after='+hier;
+            var that = this;
+            fetch(url).then((response)=>{
+            return response.json()
+            }).then((data)=>{
+                var tmp_next_event = null;
+                if ( data?.events ) {
+                    var next_events = data.events.filter((e)=> 
+                    e.start_date >= maintenant 
+                    && that.matchTag(e)
+                    );
+                    if ( next_events.length > 0 ) {
+                        tmp_next_event = next_events[0];
+                    }
+                } 
+                this.next_event = tmp_next_event;
+            })    
         }
     },
     mounted: function(){
-        var now = new Date();
-        var yesterday = now - 24*60*60;
-        var hier = dateFormat(yesterday, "yyyy-mm-dd");
-        var maintenant = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
-        var url = '/wp-json/tribe/events/v1/events?starts_after='+hier;
-        var that = this;
-        fetch(url).then((response)=>{
-        return response.json()
-        }).then((data)=>{
-            var tmp_next_event = null;
-            if ( data?.events ) {
-                var next_events = data.events.filter((e)=> e.end_date >= maintenant && that.matchTag(e));
-                if ( next_events.length > 0 ) {
-                    tmp_next_event = next_events[0];
-                }
-            } 
-            this.next_event = tmp_next_event;
-        })
+        this.fetchNextEvent();
+        // Update counter every seconds
         setInterval(this.tick, 1000);
+        // Refetch events every 10 minutes
+        setInterval(this.fetchNextEvent, 600000);
     }
 });
