@@ -1,0 +1,78 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-multiple-blocks-plugin-buy-button {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.piro_controls {
+	position: absolute;
+	background-color: grey;
+	width: 50%;
+	right: 0px;
+	border-bottom-left-radius: 10px;
+	top: -20px;
+	label {
+		vertical-align: top;
+		margin-left: 5px;
+	}
+}
+
+[data-type="piro-plugin/countdown"] .vue-mounted,
+.wp-block-piro-plugin-countdown .vue-mounted#mount  {
+
+	.eb-cd-inner{
+			flex-direction: row;
+			display: flex;
+justify-content: center;
+	 .box {
+		background-image: linear-gradient(45deg,#7967ff,#c277f2);
+		background-color: #7967ff;
+		transition: background 0.5s, border 0.5s, border-radius 0.5s, box-shadow 0.5s;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		border-radius: 10px;
+		flex-direction: column;
+		align-items: center;
+		display: flex;
+		min-width: 127px;
+
+		 span {
+			display: block;
+		  }
+		  span.eb-cd-digit {
+			font-size: 40px;
+			color: #fff;
+		  }
+		  span.eb-cd-label {
+			font-size: 18px;
+			color: #fff;
+		  }
+		}
+
+		.box + .box {
+			margin: 0;
+			  margin-left: 0px;
+			margin-left: 30px;
+		  }
+	}
+
+	h1 {
+		font-size: 22px;
+		font-weight: bold;
+		font-variant: small-caps;
+		text-align: center;
+	}
+
+	h1 span.cd-subtitle {
+		display: block;
+		font-style: italic;
+		font-weight: lighter;
+	}
+}

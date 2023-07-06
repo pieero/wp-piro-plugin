@@ -1,8 +1,9 @@
 import he from "he";
+import moment from "moment";
 
 Vue.component("AgendaEvent", {
     template:`
-    <li><span :title="description">{{tag}}{{startDate}} à {{startTime}}{{location}}
+    <li><span :title="description">{{tag}}{{startDate}}{{location}}
     <br/><span class="description">{{title}}</span></span>
     </li>
     `,
@@ -13,25 +14,9 @@ Vue.component("AgendaEvent", {
     },
     computed: {
         startDate() {
-            const sd = this.event.start_date_details;
-            const date = new Date(Date.UTC(sd.year, sd.month+1, sd.day));
-
-            const options = {
-               hour12: false,
-               weekday: 'long',
-               day: 'numeric',
-               month: 'long',
-            };
-            
-            return new Intl.DateTimeFormat("fr", options).format(date);
-        },
-        startTime() {
-            const sd = this.event.start_date_details;
-            var retVal = sd.hour+"H";
-            if ( sd.minute ) {
-                retVal += sd.minute;
-            }
-            return retVal;
+            var localMoment = moment(this.event.start_date, "YYYY-MM-DD HH:mm:ss");
+            localMoment.locale('fr'); 
+            return localMoment.format("dddd D MMMM [à] HH[h]mm");
         },
         title() {
             return he.decode(this.event.title);

@@ -11,7 +11,9 @@
     "start": "wp-scripts start",
     "packages-update": "wp-scripts packages-update",
     "start:agenda": "wp-scripts start blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
-    "build:agenda": "wp-scripts build blocks/agenda/src/index.js --output-path=blocks/agenda/build/"
+    "build:agenda": "wp-scripts build blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
+    "start:countdown": "wp-scripts start blocks/countdown/src/index.js --output-path=blocks/countdown/build/",
+    "build:countdown": "wp-scripts build blocks/countdown/src/index.js --output-path=blocks/countdown/build/"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +23,7 @@
     "@wordpress/i18n": "^4.36.0",
     "@wordpress/scripts": "^26.7.0",
     "dateformat": "^5.0.3",
-    "he": "^1.2.0"
+    "he": "^1.2.0",
+    "moment": "^2.29.4"
   }
 }

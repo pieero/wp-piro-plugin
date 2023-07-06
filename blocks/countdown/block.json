@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "piro-plugin/countdown",
+	"version": "0.1.0",
+	"title": "Compte A Rebours",
+	"category": "widgets",
+	"icon": "backup",
+	"description": "Count down on next event.",
+	"supports": {
+		"html": false,
+		"color": {
+            "text": true,
+            "background": true,
+            "link": true
+        }
+	},
+	"textdomain": "piro-plugin",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css",
+	"attributes": {
+		"tags": {
+			"type": "string",
+			"default": ""
+		},
+		"delay": {
+			"type": "integer",
+			"default": 7
+		}
+	}
+	
+}

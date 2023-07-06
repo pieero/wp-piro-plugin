@@ -9,6 +9,13 @@
           window.mountAgenda(el,tags);
         });
         // Look for any count-down to mount
+        var countdowns = document.querySelectorAll('[class="wp-block-piro-plugin-countdown"]');
+        countdowns.forEach((countdown) => {
+          var tags = countdown.attributes?.getNamedItem('tags')?.value;
+          var delay = countdown.attributes?.getNamedItem('delay')?.value;
+          var el = countdown.querySelector("#mount");
+          window.mountCountdown(el,{tags:tags,delay:delay});
+        });
 
     });
 /*

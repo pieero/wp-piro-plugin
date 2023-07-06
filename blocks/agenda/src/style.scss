@@ -11,12 +11,14 @@
 	padding: 2px;
 }
 
-.agenda_controls {
+.piro_controls {
 	position: absolute;
 	background-color: grey;
 	width: 50%;
 	right: 0px;
 	border-bottom-left-radius: 10px;
+	top: -20px;
+
 	label {
 		vertical-align: top;
 		margin-left: 5px;
