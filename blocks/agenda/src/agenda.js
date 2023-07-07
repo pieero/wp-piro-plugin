@@ -5,7 +5,6 @@ var piro_plugin_agenda_reg_interval = null;
 
 import './components/AgendaYear';
 import './components/Agenda';
-import './components/AgendaControls';
 
 const piro_plugin_mount_agendas = function() {
     const agendas = piro_plugin_agenda_to_register.keys();//document.querySelectorAll(`[data-type="piro-plugin/agenda"]`);
@@ -16,15 +15,10 @@ const piro_plugin_mount_agendas = function() {
         if( agenda ) {
             var vm = new Vue({
                 el: agenda,
-                template: `
-<div id="mount" class="vue-mounted">
-    <AgendaControls v-if="selected" :props="props" />
-    <Agenda :tags="tags" />
-</div>`,
+                template: `<Agenda :tags="tags" id="mount" class="vue-mounted" />`,
                 data: {
                     id: id,
                     props: props,
-                    selected: false
                 },
                 computed: {
                     tag_list() {
@@ -46,7 +40,6 @@ const piro_plugin_mount_agendas = function() {
                 methods: {
                     updateProps(val) {
                         this.props = val;
-                        this.selected = this.props.isSelected;
                         this.tags = this.props.attributes.tags;
                     },
                 },

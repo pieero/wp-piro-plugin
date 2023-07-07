@@ -32,8 +32,8 @@
 			display: flex;
 justify-content: center;
 	 .box {
-		background-image: linear-gradient(45deg,#7967ff,#c277f2);
-		background-color: #7967ff;
+		//background-image: linear-gradient(45deg,#7967ff,#c277f2);
+		//background-color: #7967ff;
 		transition: background 0.5s, border 0.5s, border-radius 0.5s, box-shadow 0.5s;
 		padding-top: 20px;
 		padding-bottom: 20px;
@@ -48,11 +48,11 @@ justify-content: center;
 		  }
 		  span.eb-cd-digit {
 			font-size: 40px;
-			color: #fff;
+			//color: #fff;
 		  }
 		  span.eb-cd-label {
 			font-size: 18px;
-			color: #fff;
+			//color: #fff;
 		  }
 		}
 

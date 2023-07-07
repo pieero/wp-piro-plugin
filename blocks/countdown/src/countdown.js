@@ -4,7 +4,6 @@ var piro_plugin_countdown_vms = new Map();
 var piro_plugin_countdown_reg_interval = null;
 
 import './components/Countdown';
-import './components/CountdownControls';
 
 const piro_plugin_mount_countdowns = function() {
     const countdowns = piro_plugin_countdown_to_register.keys();//document.querySelectorAll(`[data-type="piro-plugin/countdown"]`);
@@ -15,15 +14,10 @@ const piro_plugin_mount_countdowns = function() {
         if( countdown ) {
             var vm = new Vue({
                 el: countdown,
-                template: `
-<div id="mount" class="vue-mounted">
-    <CountdownControls v-if="selected" :props="props" />
-    <Countdown :delay="delay" :tags="tags" />
-</div>`,
+                template: `<Countdown :delay="delay" :tags="tags" id="mount" class="vue-mounted" />`,
                 data: {
                     id: id,
                     props: props,
-                    selected: false
                 },
                 computed: {
                     tag_list() {
@@ -53,7 +47,6 @@ const piro_plugin_mount_countdowns = function() {
                 methods: {
                     updateProps(val) {
                         this.props = val;
-                        this.selected = this.props.isSelected;
                         this.delay = this.props.attributes.delay;
                         this.tags = this.props.attributes.tags;
                     },
