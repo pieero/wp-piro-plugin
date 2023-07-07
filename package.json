@@ -12,8 +12,11 @@
     "packages-update": "wp-scripts packages-update",
     "start:agenda": "wp-scripts start blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
     "build:agenda": "wp-scripts build blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
+    "prod:agenda": "wp-scripts build --mode=production blocks/agenda/src/index.js --output-path=blocks/agenda/build/",
     "start:countdown": "wp-scripts start blocks/countdown/src/index.js --output-path=blocks/countdown/build/",
-    "build:countdown": "wp-scripts build blocks/countdown/src/index.js --output-path=blocks/countdown/build/"
+    "build:countdown": "wp-scripts build blocks/countdown/src/index.js --output-path=blocks/countdown/build/",
+    "prod:countdown": "wp-scripts build --mode=production blocks/countdown/src/index.js --output-path=blocks/countdown/build/",
+    "prod": "npm run prod:agenda && npm run prod:countdown"
   },
   "author": "",
   "license": "ISC",
