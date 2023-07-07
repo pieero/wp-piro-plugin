@@ -15,7 +15,10 @@ const piro_plugin_mount_agendas = function() {
         if( agenda ) {
             var vm = new Vue({
                 el: agenda,
-                template: `<Agenda :tags="tags" id="mount" class="vue-mounted" />`,
+                template: `<div>
+                <p>Agenda<p>
+                <Agenda :tags="tags" id="mount" class="vue-mounted" />
+                </div>`,
                 data: {
                     id: id,
                     props: props,

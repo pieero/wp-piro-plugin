@@ -14,7 +14,7 @@ const piro_plugin_mount_countdowns = function() {
         if( countdown ) {
             var vm = new Vue({
                 el: countdown,
-                template: `<Countdown :delay="delay" :tags="tags" id="mount" :demo="preview" class="vue-mounted" />`,
+                template: `<div><p>Countdown</p><Countdown :delay="delay" :tags="tags" id="mount" :demo="preview" class="vue-mounted" /></div>`,
                 data: {
                     id: id,
                     props: props,
