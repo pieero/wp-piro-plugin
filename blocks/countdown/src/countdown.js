@@ -14,10 +14,11 @@ const piro_plugin_mount_countdowns = function() {
         if( countdown ) {
             var vm = new Vue({
                 el: countdown,
-                template: `<Countdown :delay="delay" :tags="tags" id="mount" class="vue-mounted" />`,
+                template: `<Countdown :delay="delay" :tags="tags" id="mount" :demo="preview" class="vue-mounted" />`,
                 data: {
                     id: id,
                     props: props,
+                    preview: props.attributes?.preview
                 },
                 computed: {
                     tag_list() {

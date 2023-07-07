@@ -1,9 +1,9 @@
 import dateFormat from "dateformat";
 
 Vue.component("Agenda", {
-    template:`<div><h1 v-if="next_events_by_years.length > 0" >Prochainement</h1>
+    template:`<div><h3 v-if="next_events_by_years.length > 0" >Prochainement</h3>
     <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
-    <h1 v-if="past_events_by_years.length > 0" >Evenements passés</h1>
+    <h3 v-if="past_events_by_years.length > 0" >Evenements passés</h3>
     <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
     <p v-if="past_events_by_years.length == 0 && next_events_by_years.length == 0">Aucun evenement! verifiez les tags.</p>
     </div>`,

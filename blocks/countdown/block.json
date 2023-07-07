@@ -28,6 +28,10 @@
 			"type": "integer",
 			"default": 7
 		}
+	},
+	"example": {
+		"attributes": {
+			"preview": "true"
+		}
 	}
-	
 }

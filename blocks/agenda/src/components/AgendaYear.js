@@ -2,7 +2,7 @@ import './AgendaEvent';
 
 Vue.component("AgendaYear", {
     template:`<div>
-    <h2>{{year}}</h2>
+    <h4>{{year}}</h4>
     <ul>
     <AgendaEvent v-for="event in events" :event="event" v-bind:key="event.id" ></AgendaEvent>
     </ul>

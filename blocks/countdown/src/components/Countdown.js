@@ -1,4 +1,3 @@
-import dateFormat from "dateformat";
 import he from "he";
 import moment from "moment/moment";
 
@@ -21,7 +20,7 @@ Vue.component("Countdown", {
     </div>
     <p v-if="!next_event">Aucun evenement! verifiez les tags.</p>
     </div>`,
-    props: ['tags', 'delay'],
+    props: ['tags', 'delay', 'demo'],
     data: () => {
         return {
             next_event : null,

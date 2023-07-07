@@ -29,6 +29,11 @@
 			"default": "zzz"
 		}
 
+	},
+	"example": {
+		"attributes": {
+			"preview": "true"
+		}
 	}
 	
 }
