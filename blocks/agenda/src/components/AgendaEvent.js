@@ -16,7 +16,11 @@ Vue.component("AgendaEvent", {
         startDate() {
             var localMoment = moment(this.event.start_date, "YYYY-MM-DD HH:mm:ss");
             localMoment.locale("fr"); 
-            return localMoment.format("dddd D MMMM [à] HH[h]mm");
+            if ( this.event.all_day ) {
+                return localMoment.format("dddd D MMMM");
+            } else {
+                return localMoment.format("dddd D MMMM [à] HH[h]mm");
+            }
         },
         title() {
             return he.decode(this.event.title);
