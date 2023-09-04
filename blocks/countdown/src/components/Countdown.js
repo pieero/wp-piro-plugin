@@ -18,7 +18,6 @@ Vue.component("Countdown", {
             <span class="eb-cd-digit">{{seconds}}</span><span class="eb-cd-label">Secondes</span>
         </div>
     </div>
-    <!--p v-if="!next_event">Aucun evenement! verifiez les tags.</p-->
     </div>`,
     props: ['tags', 'delay', 'demo'],
     data: () => {
