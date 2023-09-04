@@ -17,6 +17,16 @@ Vue.component("AgendaEvent", {
             var localMoment = moment(this.event.start_date, "YYYY-MM-DD HH:mm:ss");
             localMoment.locale("fr"); 
             if ( this.event.all_day ) {
+                var localEndMoment = moment(this.event.end_date, "YYYY-MM-DD HH:mm:ss");
+                if ( localMoment.year() != localEndMoment.year()) {
+                    return localMoment.format("dddd D MMMM YYYY") + " au " + localEndMoment.format("dddd D MMMM YYYY");
+                }
+                if ( localMoment.month() != localEndMoment.month()) {
+                    return localMoment.format("dddd D MMMM") + " au " + localEndMoment.format("dddd D MMMM");
+                }
+                if ( localMoment.day() != localEndMoment.day()) {
+                    return localMoment.format("dddd D") + " au " + localEndMoment.format("dddd D MMMM");
+                }
                 return localMoment.format("dddd D MMMM");
             } else {
                 return localMoment.format("dddd D MMMM [à] HH[h]mm");

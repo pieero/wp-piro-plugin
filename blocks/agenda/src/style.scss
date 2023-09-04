@@ -47,6 +47,7 @@
 		padding-left: var(--icon-space);
 		line-height: 23px;
 		margin: 15px 0px;
+		margin-left: 44px;;
 
 		span {
 			font-size: 18px;
@@ -72,7 +73,8 @@
 		line-height: 44px;;
 		font-family: FontAwesome;
 		display: inline-block;
-		margin-left: calc( var(--icon-space) * -.5 );
+		margin-left: calc( var(--icon-space) * -1 );
 		width: var(--icon-space);
+		vertical-align: top;
 	  }
 }

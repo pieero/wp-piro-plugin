@@ -17,7 +17,7 @@ Vue.component("Agenda", {
     computed: {
         tag_list() {
             if ( this.tags.trim().length > 0 ) {
-                return this.tags.split(/[\s,]+/).map((v) => v.trim());
+                return this.tags.split(/[,]+/).map((v) => v.trim());
             } else {
                 return [];
             }
@@ -59,21 +59,38 @@ Vue.component("Agenda", {
             }
             var retVal = Array.from(years.values());
             return retVal;
+        },
+        async fetchEvents(page=1) {
+            var maintenant = dateFormat(Date(), "yyyy-mm-dd HH:MM:ss");
+            var url = '/wp-json/tribe/events/v1/events?starts_after=1990-01-01&page='+page;
+            fetch(url).then((response)=>{
+            return response.json()
+            }).then((data)=>{
+                if ( data?.events ) {
+                    const tmp_past_events = data.events.filter((e)=> e.end_date < maintenant);
+                    const tmp_next_events = data.events.filter((e)=> e.end_date >= maintenant);
+
+                    if ( page == 1 ) {
+                        this.past_events = tmp_past_events;
+                        this.next_events = tmp_next_events;
+                    } else {
+                        this.past_events = this.past_events.concat(tmp_past_events);
+                        this.next_events = this.next_events.concat(tmp_next_events);
+                    }
+                    if( this.past_events.length + this.next_events.length < data.total && page < data.total_pages) {
+                        this.fetchEvents(page+1);
+                    }
+                } else {
+                    if ( page == 1 ) {
+                        this.past_events = [];
+                        this.next_events = [];
+                    }
+                }
+            })
+    
         }
     },
     mounted: function(){
-        var maintenant = dateFormat(Date(), "yyyy-mm-dd HH:MM:ss");
-        var url = '/wp-json/tribe/events/v1/events?starts_after=1990-01-01';
-        fetch(url).then((response)=>{
-        return response.json()
-        }).then((data)=>{
-            if ( data?.events ) {
-                this.past_events = data.events.filter((e)=> e.end_date < maintenant);
-                this.next_events = data.events.filter((e)=> e.end_date >= maintenant);
-            } else {
-                this.past_events = [];
-                this.next_events = [];
-            }
-        })
+        this.fetchEvents();
     }
 });

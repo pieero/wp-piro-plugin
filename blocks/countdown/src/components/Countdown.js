@@ -6,19 +6,19 @@ Vue.component("Countdown", {
     <h1 v-if="show" class="cd-title">{{next_event.tags[0].name}} {{startDate}}{{location}}<span class="cd-subtitle">{{title}}</span></h1>
     <div class="eb-cd-inner" v-if="show" >
         <div class="box cd-box-day">
-            <span class="eb-cd-digit">{{days}}</span><span class="eb-cd-label">Days</span>
+            <span class="eb-cd-digit">{{days}}</span><span class="eb-cd-label">Jours</span>
         </div>
         <div class="box cd-box-hour">
-            <span class="eb-cd-digit">{{hours}}</span><span class="eb-cd-label">Hours</span>
+            <span class="eb-cd-digit">{{hours}}</span><span class="eb-cd-label">Heures</span>
         </div>
         <div class="box cd-box-minute">
             <span class="eb-cd-digit">{{minutes}}</span><span class="eb-cd-label">Minutes</span>
         </div>
         <div class="box cd-box-second">
-            <span class="eb-cd-digit">{{seconds}}</span><span class="eb-cd-label">Seconds</span>
+            <span class="eb-cd-digit">{{seconds}}</span><span class="eb-cd-label">Secondes</span>
         </div>
     </div>
-    <p v-if="!next_event">Aucun evenement! verifiez les tags.</p>
+    <!--p v-if="!next_event">Aucun evenement! verifiez les tags.</p-->
     </div>`,
     props: ['tags', 'delay', 'demo'],
     data: () => {
