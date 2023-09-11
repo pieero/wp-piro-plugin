@@ -13,7 +13,12 @@
             "text": true,
             "background": true,
             "link": true
-        }
+        },
+		"spacing": {
+			"margin": true,  
+			"padding": true, 
+			"blockGap": true
+		}
 	},
 	"textdomain": "piro-plugin",
 	"editorScript": "file:./build/index.js",
@@ -24,9 +29,18 @@
 			"type": "string",
 			"default": ""
 		},
-		"url": {
+		"categories": {
 			"type": "string",
-			"default": "zzz"
+			"default": ""
+		}
+		,
+		"nextTitle": {
+			"type": "string",
+			"default": "Prochainement"
+		},
+		"previousTitle": {
+			"type": "string",
+			"default": "Evénements passés"
 		}
 
 	},

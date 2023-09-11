@@ -37,7 +37,10 @@ Vue.component("AgendaEvent", {
         },
         location() {
            var retVal = "";
-           if ( this.event.venue?.address ) {
+           if ( this.event.venue?.description ) {
+            retVal += " - "+ he.decode(this.event.venue?.description).replaceAll(/<\/?[^>]+>/g,"");
+           }
+           else if ( this.event.venue?.address ) {
             retVal += " - "+this.event.venue?.address;
            }
            if ( this.event.venue?.city ) {
@@ -46,7 +49,7 @@ Vue.component("AgendaEvent", {
            return retVal;
         },
         description() {
-            return he.decode(this.event.description).replace("<p>","");
+            return he.decode(this.event.description).replaceAll(/<\/?[^>]+>/g,"");
         },
         tag() {
             if (this.event.tags.length > 0 )

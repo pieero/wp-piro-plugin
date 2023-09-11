@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 
 import {registerAgenda, mountAgenda} from './agenda';
 
@@ -38,22 +38,47 @@ export default function Edit( props ) {
 	registerAgenda(attr.id, props);
 
 	const [tagsList, setTagsList] = useState(null);
-	const tags = props.attributes.tags.split(',');
+	const [categoriesList, setCategoriesList] = useState(null);
+	const nextEventTitle = props.attributes.nextTitle ;
+	const previousEventTitle = props.attributes.previousTitle;
+	const tags = props.attributes.tags?.split(',');
+	const categories = props.attributes.categories;
 
 	useEffect(() => {
 	  fetch("/wp-json/tribe/events/v1/tags")
 		.then( (response) => response.json() )
 		.then( (response) => {
 		  let TagsArray = { ...response }.tags;
-		  const tagsOptions = TagsArray.map((v) => { return { label: v.name, value: v.name}; });
+		  const tagsOptions = TagsArray.map((v) => { return { label: v.name, value: v.slug}; });
 		  setTagsList(tagsOptions);
 		})
 	  .catch((err) => console.error(err));
+	  
+	  fetch("/wp-json/tribe/events/v1/categories")
+	  .then( (response) => response.json() )
+	  .then( (response) => {
+		let CategoriesArray = { ...response }.categories;
+		const categoriesOptions = CategoriesArray.map((v) => { return { label: v.name, value: v.slug}; });
+		setCategoriesList(categoriesOptions);
+	  })
+	.catch((err) => console.error(err));
+
 	}, []);
 
 
 	var saveTags = function(tagList) {
 		props.setAttributes({tags: tagList.join(",")});
+	}
+	var saveCategories = function(category) {
+		props.setAttributes({categories: category});
+	}
+
+	var saveNextTitle = function(title) {
+		props.setAttributes({nextTitle: title});
+	}
+
+	var savePreviousTitle = function(title) {
+		props.setAttributes({previousTitle: title});
 	}
 
 	return (
@@ -63,12 +88,35 @@ export default function Edit( props ) {
 				title={__('General')}
 				initialOpen={true}
 			>
+{ nextEventTitle && (
+				<TextControl
+					label={__('Titre \'Prochainement\'')}
+					value={ nextEventTitle }
+					onChange={ ( nextTitle ) => saveNextTitle( nextTitle ) }
+					__nextHasNoMarginBottom
+				/> )}
+{ previousEventTitle && (
+				<TextControl
+					label={__('Titre \'Evénements passés\'')}
+					value={ previousEventTitle }
+					onChange={ ( previousTitle ) => savePreviousTitle( previousTitle ) }
+					__nextHasNoMarginBottom
+				/> )}
+{ categoriesList && (
+				<SelectControl
+					label={__('Categories')}
+					value={ categories }
+					options={ categoriesList }
+					onChange={ ( newCategories ) => saveCategories( newCategories ) }
+					multiple={false}
+					__nextHasNoMarginBottom
+				/> )}
 { tagsList && (
 				<SelectControl
 					label={__('Tags')}
 					value={ tags }
 					options={ tagsList }
-					onChange={ ( newSize ) => saveTags( newSize ) }
+					onChange={ ( newTags ) => saveTags( newTags ) }
 					multiple={true}
 					__nextHasNoMarginBottom
 				/> )}

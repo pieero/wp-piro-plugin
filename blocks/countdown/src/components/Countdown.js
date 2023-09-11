@@ -3,7 +3,9 @@ import moment from "moment/moment";
 
 Vue.component("Countdown", {
     template:`<div>
-    <h1 v-if="show" class="cd-title">{{next_event.tags[0].name}} {{startDate}}{{location}}<span class="cd-subtitle">{{title}}</span></h1>
+    <p v-if="edit" >Countdown</p>
+    <h2 v-if="show" class="wp-block has-text-align-center wp-block-heading rich-text"><span>{{next_event.tags[0].name}} {{startDate}}</span><span>{{location}}</span></h2>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text">{{title}}</h3>
     <div class="eb-cd-inner" v-if="show" >
         <div class="box cd-box-day">
             <span class="eb-cd-digit">{{days}}</span><span class="eb-cd-label">Jours</span>
@@ -18,8 +20,11 @@ Vue.component("Countdown", {
             <span class="eb-cd-digit">{{seconds}}</span><span class="eb-cd-label">Secondes</span>
         </div>
     </div>
+    <figure v-if="image" class="wp-block-image size-large">
+        <img decoding="async" fetchpriority="high" width="1024" height="576" :src="image" alt="" class="wp-image-95" />
+    </figure>
     </div>`,
-    props: ['tags', 'delay', 'demo'],
+    props: ['tags', 'category', 'delay', 'edit'],
     data: () => {
         return {
             next_event : null,
@@ -44,16 +49,19 @@ Vue.component("Countdown", {
         },
         location() {
             var retVal = "";
-            if ( this.next_event.venue?.address ) {
-             retVal += " - "+this.next_event?.venue?.address;
+            if ( this.next_event.venue?.description ) {
+             retVal += " - "+ he.decode(this.next_event.venue?.description).replaceAll(/<\/?[^>]+>/g,"");
+            }
+            else if ( this.next_event.venue?.address ) {
+             retVal += " - "+this.next_event.venue?.address;
             }
             if ( this.next_event.venue?.city ) {
-             retVal += " - "+this.next_event?.venue?.city;
+             retVal += " - "+this.next_event.venue?.city;
             }
             return retVal;
          },
          title() {
-            return he.decode(this.next_event?.title);
+            return he ? he.decode(this.next_event?.title) : this.next_event?.title ;
          },
          remainingDays() {
             if( this.next_event ) {
@@ -64,6 +72,9 @@ Vue.component("Countdown", {
          },
          show() {
             return this.next_event && (this.delay == 0 || this.delay > this.remainingDays);
+         },
+         image() {
+            return this.next_event?.image?.url;
          }
     },
     methods: {
@@ -94,6 +105,18 @@ Vue.component("Countdown", {
             }
             return true;
         },
+        matchCategory(event) {
+            if ( this.category?.length > 0 ) {
+                for(var jt=0; jt < event.categories.length; ++jt) {
+                    const category = event.categories[jt];
+                    if( category.slug === this.category ) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        },
         fetchNextEvent() {
             var mnow = moment();
             var hier = moment().subtract(1, "days").format("YYYY-MM-DD");
@@ -107,7 +130,8 @@ Vue.component("Countdown", {
                 if ( data?.events ) {
                     var next_events = data.events.filter((e)=> 
                     e.start_date >= maintenant 
-                    && that.matchTag(e)
+                    && that.matchTag(e) 
+                    && that.matchCategory(e)
                     );
                     if ( next_events.length > 0 ) {
                         tmp_next_event = next_events[0];

@@ -15,10 +15,8 @@ const piro_plugin_mount_agendas = function() {
         if( agenda ) {
             var vm = new Vue({
                 el: agenda,
-                template: `<div>
-                <p>Agenda<p>
-                <Agenda :tags="tags" id="mount" class="vue-mounted" />
-                </div>`,
+                template: `<Agenda :tags="tags" :categories="categories" :nextTitle="nextTitle" :previousTitle="previousTitle" :edit="true" id="mount" class="vue-mounted" >
+                </Agenda>`,
                 data: {
                     id: id,
                     props: props,
@@ -38,11 +36,38 @@ const piro_plugin_mount_agendas = function() {
                         set: function(val) {
                             this.props.setAttributes({tags: val});
                         }
+                    },
+                    categories: {
+                        get: function() {
+                            return this.props.attributes.categories;
+                        },
+                        set: function(val) {
+                            this.props.setAttributes({categories: val});
+                        }
+                    },
+                    nextTitle: {
+                        get: function() {
+                            return this.props.attributes.nextTitle;
+                        },
+                        set: function(val) {
+                            this.props.setAttributes({nextTitle: val});
+                        }
+                    },
+                    previousTitle: {
+                        get: function() {
+                            return this.props.attributes.previousTitle;
+                        },
+                        set: function(val) {
+                            this.props.setAttributes({previousTitle: val});
+                        }
                     }
                 },
                 methods: {
                     updateProps(val) {
                         this.props = val;
+                        this.categories = this.props.attributes.categories;
+                        this.nextTitle = this.props.attributes.nextTitle;
+                        this.previousTitle = this.props.attributes.previousTitle;
                         this.tags = this.props.attributes.tags;
                     },
                 },
@@ -74,17 +99,20 @@ const registerAgenda = function(id, props) {
     
 };
 
-const mountAgenda = function(el,tags) {
+const mountAgenda = function(el,data) {
     var vm = new Vue({
         el: el,
         template: `
-<Agenda id="mount" :tags="tags" class="vue-mounted">
+<Agenda id="mount" :tags="tags" :categories="categories" :nextTitle="nextTitle" :previousTitle="previousTitle" class="vue-mounted">
 </Agenda>`,
         data: () => {
             return {
-            tags: tags
+                tags: data.tags,
+                categories: data.categories,
+                nextTitle: data.nextTitle,
+                previousTitle: data.previousTitle
             };
-        },
+        }/*,
         computed: {
             tag_list() {
                 if ( this.tags.trim().length > 0 ) {
@@ -93,7 +121,7 @@ const mountAgenda = function(el,tags) {
                     return [];
                 }
             }
-        }
+        }*/
     });
 
 }

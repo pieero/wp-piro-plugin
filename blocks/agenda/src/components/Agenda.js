@@ -1,13 +1,15 @@
 import dateFormat from "dateformat";
 
 Vue.component("Agenda", {
-    template:`<div><h3 v-if="next_events_by_years.length > 0" >Prochainement</h3>
+    template:`<div>
+    <p v-if="edit" >Agenda</p>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" v-if="next_events_by_years.length > 0" >{{titleNext}}</h3>
     <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
-    <h3 v-if="past_events_by_years.length > 0" >Evenements passés</h3>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" v-if="past_events_by_years.length > 0" >{{titlePrevious}}</h3>
     <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
     <p v-if="past_events_by_years.length == 0 && next_events_by_years.length == 0">Aucun evenement! verifiez les tags.</p>
     </div>`,
-    props: ['tags'],
+    props: ['tags', 'categories', 'nextTitle', 'previousTitle', 'edit'],
     data: () => {
         return {
             past_events : [],
@@ -16,8 +18,15 @@ Vue.component("Agenda", {
     },
     computed: {
         tag_list() {
-            if ( this.tags.trim().length > 0 ) {
+            if ( this.tags?.trim().length > 0 ) {
                 return this.tags.split(/[,]+/).map((v) => v.trim());
+            } else {
+                return [];
+            }
+        },
+        category_list() {
+            if ( this.categories?.trim().length > 0 ) {
+                return this.categories.split(/[,]+/).map((v) => v.trim());
             } else {
                 return [];
             }
@@ -27,15 +36,35 @@ Vue.component("Agenda", {
         },
         next_events_by_years() {
             return this.getEventsByYears(this.next_events.sort((a,b) => { return a.start_date > b.start_date }));
+        },
+        titleNext() {
+            return this.nextTitle ? this.nextTitle : "Prochainement";
+        },
+        titlePrevious() {
+            return this.previousTitle ? this.previousTitle : "Evénements passés";
         }
     },
     methods: {
         matchTag(event) {
-            if ( this.tag_list.length > 0 ) {
+            if ( this.tag_list?.length > 0 ) {
                 for(var jt=0; jt < event.tags.length; ++jt) {
                     const tag = event.tags[jt];
                     for(var it=0; it<this.tag_list.length; ++it) {
-                        if( tag.name === this.tag_list[it] ) {
+                        if( tag.slug === this.tag_list[it] ) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+            return true;
+        },
+        matchCategory(event) {
+            if ( this.category_list?.length > 0 ) {
+                for(var jt=0; jt < event.categories.length; ++jt) {
+                    const category = event.categories[jt];
+                    for(var it=0; it<this.category_list.length; ++it) {
+                        if( category.slug === this.category_list[it] ) {
                             return true;
                         }
                     }
@@ -49,6 +78,9 @@ Vue.component("Agenda", {
             for(var i=0; i< events.length; ++i) {
                 var y = events[i].start_date_details.year;
                 var event = events[i];
+                if( ! this.matchCategory(event) ) {
+                    continue;
+                }
                 if( ! this.matchTag(event) ) {
                     continue;
                 }

@@ -23,7 +23,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @return {WPElement} Element to render.
  */
 export default function save( props ) {
-	var attr = {...useBlockProps.save(), tags: props.attributes.tags };
+	var attr = {...useBlockProps.save(), 
+		tags: props.attributes.tags, 
+		categories: props.attributes.categories,
+		nextTitle: props.attributes.nextTitle,
+		previousTitle: props.attributes.previousTitle };
 	return (
 		<div { ...attr }>
 			<div id="mount" ></div>

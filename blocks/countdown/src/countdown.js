@@ -14,7 +14,7 @@ const piro_plugin_mount_countdowns = function() {
         if( countdown ) {
             var vm = new Vue({
                 el: countdown,
-                template: `<div><p>Countdown</p><Countdown :delay="delay" :tags="tags" id="mount" :demo="preview" class="vue-mounted" /></div>`,
+                template: `<Countdown :delay="delay" :tags="tags" :category="category" id="mount" :edit="true" class="vue-mounted" ></Countdown>`,
                 data: {
                     id: id,
                     props: props,
@@ -36,6 +36,14 @@ const piro_plugin_mount_countdowns = function() {
                             this.props.setAttributes({tags: val});
                         }
                     },
+                    category: {
+                        get: function() {
+                            return this.props.attributes.category;
+                        },
+                        set: function(val) {
+                            this.props.setAttributes({category: val});
+                        }
+                    },
                     delay: {
                         get: function() {
                             return this.props.attributes.delay;
@@ -50,6 +58,7 @@ const piro_plugin_mount_countdowns = function() {
                         this.props = val;
                         this.delay = this.props.attributes.delay;
                         this.tags = this.props.attributes.tags;
+                        this.category = this.props.attributes.category;
                     },
                 },
                 mounted: function(){
@@ -84,12 +93,13 @@ const mountCountdown = function(el,data) {
     var vm = new Vue({
         el: el,
         template: `
-<Countdown id="mount" :delay="delay" :tags="tags" class="vue-mounted">
+<Countdown id="mount" :delay="delay" :tags="tags" :category="category" class="vue-mounted">
 </Countdown>`,
         data: () => {
             return {
                 delay: data.delay,
-                tags: data.tags
+                tags: data.tags,
+                category: data.category, 
             };
         }
     });

@@ -40,6 +40,9 @@ export default function Edit( props ) {
 	const [tagsList, setTagsList] = useState(null);
 	const tags = props.attributes.tags.split(',');
 
+	const [categoriesList, setCategoriesList] = useState(null);
+	const category = "";
+
 	useEffect(() => {
 	  fetch("/wp-json/tribe/events/v1/tags")
 		.then( (response) => response.json() )
@@ -49,11 +52,25 @@ export default function Edit( props ) {
 		  setTagsList(tagsOptions);
 		})
 	  .catch((err) => console.error(err));
+
+	  fetch("/wp-json/tribe/events/v1/categories")
+	  .then( (response) => response.json() )
+	  .then( (response) => {
+		let CategoriesArray = { ...response }.categories;
+		const categoriesOptions = CategoriesArray.map((v) => { return { label: v.name, value: v.slug}; });
+		setCategoriesList([{label: "(Any Category)", value: ""}].concat(categoriesOptions));
+	  })
+	.catch((err) => console.error(err));
+
 	}, []);
 
 
 	var saveTags = function(tagList) {
 		props.setAttributes({tags: tagList.join(",")});
+	}
+
+	var saveCategory = function(cat) {
+		props.setAttributes({category: cat});
 	}
 
 	return (
@@ -79,6 +96,15 @@ export default function Edit( props ) {
 					multiple={true}
 					__nextHasNoMarginBottom
 				/> )}
+				{ categoriesList && (
+					<SelectControl
+						label={__('Category')}
+						value={ category }
+						options={ categoriesList }
+						onChange={ ( newSize ) => saveCategory( newSize ) }
+						multiple={false}
+						__nextHasNoMarginBottom
+					/> )}
 			
 			</PanelBody>
 		</InspectorControls>
