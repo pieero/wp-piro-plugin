@@ -23,10 +23,10 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @return {WPElement} Element to render.
  */
 export default function save( props ) {
-	var attr = {...useBlockProps.save(), tags: props.attributes.tags, delay: props.attributes.delay };
+	var attr = {...useBlockProps.save(), tags: props.attributes.tags, category: props.attributes.category, delay: props.attributes.delay };
 	return (
 		<div { ...attr }>
 			<div id="mount" ></div>
-		</div>
+		</div> 
 	);
 }

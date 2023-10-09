@@ -14,8 +14,18 @@ const piro_plugin_mount_agendas = function() {
         const agenda = document.querySelector(`#`+id+` #mount`);
         if( agenda ) {
             var vm = new Vue({
+                saverFunc: (data) => {
+                },
                 el: agenda,
-                template: `<Agenda :tags="tags" :categories="categories" :nextTitle="nextTitle" :previousTitle="previousTitle" :edit="true" id="mount" class="vue-mounted" >
+                template: `<Agenda 
+                    :tags="tags" 
+                    :categories="categories" 
+                    :nextTitle="nextTitle" 
+                    :previousTitle="previousTitle" 
+                    :edit="true" 
+                    id="mount" 
+                    class="vue-mounted" 
+                    @titleSaved="saveTitles" >
                 </Agenda>`,
                 data: {
                     id: id,
@@ -70,6 +80,12 @@ const piro_plugin_mount_agendas = function() {
                         this.previousTitle = this.props.attributes.previousTitle;
                         this.tags = this.props.attributes.tags;
                     },
+                    saveTitles(titles) {
+                        this.nextTitle = titles.next;
+                        this.previousTitle = titles.prev;
+                        this.props.setAttributes({nextTitle: titles.next});
+                        this.props.setAttributes({previousTitle: titles.prev});
+                    }
                 },
                 mounted: function(){
                     this.$on("updateProps", this.updateProps);
@@ -85,7 +101,7 @@ const piro_plugin_mount_agendas = function() {
     }
 };
 
-const registerAgenda = function(id, props) {
+const registerAgenda = function(id, props, saver) {
     const agenda = document.querySelector(`#`+id+` #mount`);
     if ( agenda && agenda.attributes.getNamedItem("class")?.value === "vue-mounted" ) {
             const vm = piro_plugin_agenda_vms.get(id);

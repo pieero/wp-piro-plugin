@@ -37,34 +37,12 @@ export default function Edit( props ) {
 	var attr = {...useBlockProps() };
 	registerAgenda(attr.id, props);
 
-	const [tagsList, setTagsList] = useState(null);
-	const [categoriesList, setCategoriesList] = useState(null);
-	const nextEventTitle = props.attributes.nextTitle ;
-	const previousEventTitle = props.attributes.previousTitle;
 	const tags = props.attributes.tags?.split(',');
 	const categories = props.attributes.categories;
-
+	
 	useEffect(() => {
-	  fetch("/wp-json/tribe/events/v1/tags")
-		.then( (response) => response.json() )
-		.then( (response) => {
-		  let TagsArray = { ...response }.tags;
-		  const tagsOptions = TagsArray.map((v) => { return { label: v.name, value: v.slug}; });
-		  setTagsList(tagsOptions);
-		})
-	  .catch((err) => console.error(err));
-	  
-	  fetch("/wp-json/tribe/events/v1/categories")
-	  .then( (response) => response.json() )
-	  .then( (response) => {
-		let CategoriesArray = { ...response }.categories;
-		const categoriesOptions = CategoriesArray.map((v) => { return { label: v.name, value: v.slug}; });
-		setCategoriesList(categoriesOptions);
-	  })
-	.catch((err) => console.error(err));
-
+        PiroCommon.fetchEventMetaData();
 	}, []);
-
 
 	var saveTags = function(tagList) {
 		props.setAttributes({tags: tagList.join(",")});
@@ -88,34 +66,20 @@ export default function Edit( props ) {
 				title={__('General')}
 				initialOpen={true}
 			>
-{ nextEventTitle && (
-				<TextControl
-					label={__('Titre \'Prochainement\'')}
-					value={ nextEventTitle }
-					onChange={ ( nextTitle ) => saveNextTitle( nextTitle ) }
-					__nextHasNoMarginBottom
-				/> )}
-{ previousEventTitle && (
-				<TextControl
-					label={__('Titre \'Evénements passés\'')}
-					value={ previousEventTitle }
-					onChange={ ( previousTitle ) => savePreviousTitle( previousTitle ) }
-					__nextHasNoMarginBottom
-				/> )}
-{ categoriesList && (
+{ PiroCommon.event_metadata?.category_list && (
 				<SelectControl
 					label={__('Categories')}
 					value={ categories }
-					options={ categoriesList }
+					options={ PiroCommon.event_metadata?.category_list }
 					onChange={ ( newCategories ) => saveCategories( newCategories ) }
 					multiple={false}
 					__nextHasNoMarginBottom
 				/> )}
-{ tagsList && (
+{ PiroCommon.event_metadata?.tag_list && (
 				<SelectControl
 					label={__('Tags')}
 					value={ tags }
-					options={ tagsList }
+					options={ PiroCommon.event_metadata?.tag_list }
 					onChange={ ( newTags ) => saveTags( newTags ) }
 					multiple={true}
 					__nextHasNoMarginBottom
@@ -126,12 +90,3 @@ export default function Edit( props ) {
 		</div>
 	);
 }
-
-/**
- * 
- * 					options={ [
-						{ label: 'Big', value: '100%' },
-						{ label: 'Medium', value: '50%' },
-						{ label: 'Small', value: '25%' },
-					] }
-*/ 

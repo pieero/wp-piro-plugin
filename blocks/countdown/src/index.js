@@ -29,7 +29,7 @@ import moment from 'moment';
  */
 (function() {
 	document.addEventListener("DOMContentLoaded", () => {
-		moment.updateLocale('fr', window.moment_locale_fr);});
+		moment.updateLocale('fr', PiroCommon.moment_locale_fr);});
 
 	registerBlockType( metadata.name , {
 		/**

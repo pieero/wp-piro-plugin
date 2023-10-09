@@ -3,9 +3,9 @@ import dateFormat from "dateformat";
 Vue.component("Agenda", {
     template:`<div>
     <p v-if="edit" >Agenda</p>
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" v-if="next_events_by_years.length > 0" >{{titleNext}}</h3>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" contenteditable="true" @input="changeNextTitle" @blur="saveTitles" v-if="next_events_by_years.length > 0 || edit" >{{editableNextTitle}}</h3>
     <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" v-if="past_events_by_years.length > 0" >{{titlePrevious}}</h3>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" contenteditable="true" @input="changePreviousTitle" @blur="saveTitles" v-if="past_events_by_years.length > 0 || edit" >{{editablePreviousTitle}}</h3>
     <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
     <p v-if="past_events_by_years.length == 0 && next_events_by_years.length == 0">Aucun evenement! verifiez les tags.</p>
     </div>`,
@@ -14,6 +14,8 @@ Vue.component("Agenda", {
         return {
             past_events : [],
             next_events : [],
+            editableNextTitle: null,
+            editablePreviousTitle: null,
         };
     },
     computed: {
@@ -36,15 +38,24 @@ Vue.component("Agenda", {
         },
         next_events_by_years() {
             return this.getEventsByYears(this.next_events.sort((a,b) => { return a.start_date > b.start_date }));
-        },
-        titleNext() {
-            return this.nextTitle ? this.nextTitle : "Prochainement";
-        },
-        titlePrevious() {
-            return this.previousTitle ? this.previousTitle : "Evénements passés";
         }
     },
     methods: {
+        emitSaveTitles() {
+            this.$emit("titleSaved", {next: this.nextTitle, prev: this.previousTitle});
+        },
+        changeNextTitle(inputEvent) {
+            this.nextTitle = inputEvent.currentTarget.textContent;
+            this.emitSaveTitles();
+        },
+        changePreviousTitle(inputEvent) {
+            this.previousTitle = inputEvent.currentTarget.textContent;
+            this.emitSaveTitles();
+        },
+        saveTitles() {
+            this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
+            this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";    
+        },
         matchTag(event) {
             if ( this.tag_list?.length > 0 ) {
                 for(var jt=0; jt < event.tags.length; ++jt) {
@@ -124,5 +135,7 @@ Vue.component("Agenda", {
     },
     mounted: function(){
         this.fetchEvents();
+        this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
+        this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";
     }
 });

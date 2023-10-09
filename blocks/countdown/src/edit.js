@@ -37,33 +37,12 @@ export default function Edit( props ) {
 	var attr = {...useBlockProps() };
 	registerCountdown(attr.id, props);
 
-	const [tagsList, setTagsList] = useState(null);
 	const tags = props.attributes.tags.split(',');
-
-	const [categoriesList, setCategoriesList] = useState(null);
-	const category = "";
+	const category = props.attributes.category;
 
 	useEffect(() => {
-	  fetch("/wp-json/tribe/events/v1/tags")
-		.then( (response) => response.json() )
-		.then( (response) => {
-		  let TagsArray = { ...response }.tags;
-		  const tagsOptions = TagsArray.map((v) => { return { label: v.name, value: v.name}; });
-		  setTagsList(tagsOptions);
-		})
-	  .catch((err) => console.error(err));
-
-	  fetch("/wp-json/tribe/events/v1/categories")
-	  .then( (response) => response.json() )
-	  .then( (response) => {
-		let CategoriesArray = { ...response }.categories;
-		const categoriesOptions = CategoriesArray.map((v) => { return { label: v.name, value: v.slug}; });
-		setCategoriesList([{label: "(Any Category)", value: ""}].concat(categoriesOptions));
-	  })
-	.catch((err) => console.error(err));
-
+        PiroCommon.fetchEventMetaData();
 	}, []);
-
 
 	var saveTags = function(tagList) {
 		props.setAttributes({tags: tagList.join(",")});
@@ -87,20 +66,20 @@ export default function Edit( props ) {
 					min={ 0 }
 					max={ 60 }
 						/>
-				{ tagsList && (
+				{ PiroCommon.event_metadata?.tag_list && (
 				<SelectControl
 					label={__('Tags')}
 					value={ tags }
-					options={ tagsList }
+					options={ PiroCommon.event_metadata?.tag_list }
 					onChange={ ( newSize ) => saveTags( newSize ) }
 					multiple={true}
 					__nextHasNoMarginBottom
 				/> )}
-				{ categoriesList && (
+				{ PiroCommon.event_metadata?.category_list && (
 					<SelectControl
 						label={__('Category')}
 						value={ category }
-						options={ categoriesList }
+						options={ PiroCommon.event_metadata?.category_list }
 						onChange={ ( newSize ) => saveCategory( newSize ) }
 						multiple={false}
 						__nextHasNoMarginBottom
@@ -113,16 +92,3 @@ export default function Edit( props ) {
 		
 	);
 }
-/*
-<InspectorControls>
-			<TextControl
-            label="Tags"
-            value={ props.attributes.tags }
-            onChange={ ( value ) => props.setAttribute( 'tags', value ) }
-			/>
-			        <TextControl
-            label="Delay"
-            value={ props.attributes.delay }
-            onChange={ ( value ) => props.setAttribute( 'delay', value ) }
-			/>
-			</InspectorControls>*/
