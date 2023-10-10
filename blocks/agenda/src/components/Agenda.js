@@ -3,9 +3,9 @@ import dateFormat from "dateformat";
 Vue.component("Agenda", {
     template:`<div>
     <p v-if="edit" >Agenda</p>
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" contenteditable="true" @input="changeNextTitle" @blur="saveTitles" v-if="next_events_by_years.length > 0 || edit" >{{editableNextTitle}}</h3>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changeNextTitle" @blur="saveTitles" v-if="next_events_by_years.length > 0 || edit" >{{editableNextTitle}}</h3>
     <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" contenteditable="true" @input="changePreviousTitle" @blur="saveTitles" v-if="past_events_by_years.length > 0 || edit" >{{editablePreviousTitle}}</h3>
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changePreviousTitle" @blur="saveTitles" v-if="past_events_by_years.length > 0 || edit" >{{editablePreviousTitle}}</h3>
     <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
     <p v-if="past_events_by_years.length == 0 && next_events_by_years.length == 0">Aucun evenement! verifiez les tags.</p>
     </div>`,
