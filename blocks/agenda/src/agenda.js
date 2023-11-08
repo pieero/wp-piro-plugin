@@ -14,14 +14,13 @@ const piro_plugin_mount_agendas = function() {
         const agenda = document.querySelector(`#`+id+` #mount`);
         if( agenda ) {
             var vm = new Vue({
-                saverFunc: (data) => {
-                },
                 el: agenda,
                 template: `<Agenda 
                     :tags="tags" 
                     :categories="categories" 
                     :nextTitle="nextTitle" 
                     :previousTitle="previousTitle" 
+                    :bulletColor="bulletColor"
                     :edit="true" 
                     id="mount" 
                     class="vue-mounted" 
@@ -45,6 +44,14 @@ const piro_plugin_mount_agendas = function() {
                         },
                         set: function(val) {
                             this.props.setAttributes({tags: val});
+                        }
+                    },
+                    bulletColor: {
+                        get: function() {
+                            return this.props.attributes.bulletColor;
+                        },
+                        set: function(val) {
+                            this.props.setAttributes({bulletColor: val});
                         }
                     },
                     categories: {
@@ -78,6 +85,7 @@ const piro_plugin_mount_agendas = function() {
                         this.categories = this.props.attributes.categories;
                         this.nextTitle = this.props.attributes.nextTitle;
                         this.previousTitle = this.props.attributes.previousTitle;
+                        this.bulletColor = this.props.attributes.bulletColor;
                         this.tags = this.props.attributes.tags;
                     },
                     saveTitles(titles) {
@@ -119,25 +127,23 @@ const mountAgenda = function(el,data) {
     var vm = new Vue({
         el: el,
         template: `
-<Agenda id="mount" :tags="tags" :categories="categories" :nextTitle="nextTitle" :previousTitle="previousTitle" class="vue-mounted">
+<Agenda id="mount" 
+    :tags="tags" 
+    :categories="categories" 
+    :nextTitle="nextTitle" 
+    :previousTitle="previousTitle" 
+    :bulletColor="bulletColor" 
+    class="vue-mounted">
 </Agenda>`,
         data: () => {
             return {
                 tags: data.tags,
                 categories: data.categories,
                 nextTitle: data.nextTitle,
-                previousTitle: data.previousTitle
+                previousTitle: data.previousTitle,
+                bulletColor: data.bulletColor
             };
-        }/*,
-        computed: {
-            tag_list() {
-                if ( this.tags.trim().length > 0 ) {
-                    return this.tags.split(/[\s,]+/).map((v) => v.trim());
-                } else {
-                    return [];
-                }
-            }
-        }*/
+        }
     });
 
 }

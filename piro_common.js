@@ -16,7 +16,7 @@ PiroCommon = {
           LLLL : 'dddd D MMMM YYYY HH:mm'
         },
         calendar : {
-          sameDay : '[Aujourd’hui à] LT',
+          sameDay : '[Aujourd\'hui à] LT',
           nextDay : '[Demain à] LT',
           nextWeek : 'dddd [à] LT',
           lastDay : '[Hier à] LT',
@@ -64,6 +64,25 @@ PiroCommon = {
         category_list : null 
     },
     fetching: false,
+    getAllCSSVars: function() { return Array.from(document.styleSheets)
+    .filter((styleSheet) => {
+        let isLocal = !styleSheet.href || styleSheet.href.startsWith(window.location.origin)
+        if (!isLocal) console.warn("Skipping remote style sheet due to cors: ", styleSheet.href);
+        return isLocal;
+    })
+    .map((styleSheet) => Array.from(styleSheet.cssRules))
+    .flat()
+    .filter((cssRule) => cssRule.selectorText === ':root' || cssRule.selectorText === 'body' )
+    .map((cssRule) => cssRule.cssText.split('{')[1].split('}')[0].trim().split(';'))
+    .flat()
+    .filter((text) => text !== '')
+    .map((text) => text.split(':'))
+    .map((parts) => {
+        return {key: parts[0].trim(), value: parts[1].trim()}
+    }); },
+    getAllCssPresetColors: function() {
+      return Array.from(new Set(Array.from(PiroCommon.getAllCSSVars().filter((v) => v.key.match(/--wp.*color.*/g)).map((v) => v.key)))).sort();
+    },
     fetchEventMetaData : function() {
         if( PiroCommon.fetching ) return;
         PiroCommon.fetching = true;

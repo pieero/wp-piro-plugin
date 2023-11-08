@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody, SelectControl, CustomSelectControl } from '@wordpress/components';
 
 import {registerAgenda, mountAgenda} from './agenda';
 
@@ -39,25 +39,32 @@ export default function Edit( props ) {
 
 	const tags = props.attributes.tags?.split(',');
 	const categories = props.attributes.categories;
-	
+	//const bulletColor = props.attributes.bulletColor;
+
 	useEffect(() => {
         PiroCommon.fetchEventMetaData();
 	}, []);
 
+	var getColorOptions = function() {
+		return Array.from(PiroCommon.getAllCssPresetColors().map((v) => { return { key: v, name: v.replace(/.*color-/g, "").replaceAll('-', ' '), style: { 'borderWidth': '0 0 0 20px', "borderLeft": "solid 20px var("+v+")" } }; }));
+	}
+
 	var saveTags = function(tagList) {
 		props.setAttributes({tags: tagList.join(",")});
 	}
+
 	var saveCategories = function(category) {
 		props.setAttributes({categories: category});
 	}
 
-	var saveNextTitle = function(title) {
-		props.setAttributes({nextTitle: title});
-	}
+	const colors = getColorOptions();
+    const [ color, setBulletColor ] = useState( colors[ 0 ] );
 
-	var savePreviousTitle = function(title) {
-		props.setAttributes({previousTitle: title});
+	var saveBulletColor = function(color) {
+		props.setAttributes({bulletColor: color.key });
+		setBulletColor(color.key);
 	}
+	
 
 	return (
 		<div { ...attr }>
@@ -84,6 +91,13 @@ export default function Edit( props ) {
 					multiple={true}
 					__nextHasNoMarginBottom
 				/> )}
+        <CustomSelectControl
+            __nextUnconstrainedWidth
+            label="Bullet Color"
+            options={ colors }
+            onChange={ ( { selectedItem } ) => saveBulletColor( selectedItem ) }
+            value={ colors.find( ( option ) => option.key === color ) }
+        />
 			</PanelBody>
 		</InspectorControls>
 			<div id="mount" ></div>

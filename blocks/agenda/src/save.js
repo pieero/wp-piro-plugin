@@ -27,6 +27,7 @@ export default function save( props ) {
 		tags: props.attributes.tags, 
 		categories: props.attributes.categories,
 		nextTitle: props.attributes.nextTitle,
+		bulletColor: props.attributes.bulletColor,
 		previousTitle: props.attributes.previousTitle };
 	return (
 		<div { ...attr }>

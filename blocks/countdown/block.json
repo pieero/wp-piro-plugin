@@ -9,6 +9,8 @@
 	"description": "Count down on next event.",
 	"supports": {
 		"html": false,
+		"alignWide": true,
+		"anchor": true,
 		"color": {
             "text": true,
             "background": true,

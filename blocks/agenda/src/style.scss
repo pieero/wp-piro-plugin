@@ -49,6 +49,17 @@
 		margin: 15px 0px;
 		margin-left: 44px;;
 
+		div.icon {
+			display: inline;
+			font-size: 44px;
+			line-height: 44px;;
+			font-family: FontAwesome;
+			display: inline-block;
+			margin-left: calc( var(--icon-space) * -1 );
+			width: var(--icon-space);
+			vertical-align: top;
+		}
+
 		span {
 			font-size: 18px;
 			font-weight: bold;
@@ -66,8 +77,8 @@
 		
 	}
 
-	li:before {
-		content: "\f058"; /* FontAwesome Unicode */
+	/*li:before {
+		content: "\f058";
 		color: #21759b;
 		font-size: 44px;
 		line-height: 44px;;
@@ -76,5 +87,21 @@
 		margin-left: calc( var(--icon-space) * -1 );
 		width: var(--icon-space);
 		vertical-align: top;
-	  }
+	  }*/
+
+	li.piro-color-primary:before {
+		color: var(--global--color--primary);
+	}
+	
+	li.piro-color-secondary:before {
+		color: var(--global--color--secondary);
+	}
+	
+	li.piro-color-accent:before {
+		color: var(--global--color--accent);
+	}
+	
+	li.piro-color-text:before {
+		color: var(--global--color--text);
+	}
 }

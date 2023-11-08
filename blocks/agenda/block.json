@@ -9,6 +9,8 @@
 	"description": "Display futur and past events.",
 	"supports": {
 		"html": false,
+		"alignWide": true,
+		"anchor": true,
 		"color": {
             "text": true,
             "background": true,
@@ -41,6 +43,10 @@
 		"previousTitle": {
 			"type": "string",
 			"default": "Evénements passés"
+		},
+		"bullet_color": {
+			"type": "string",
+			"default": "Couleur des pastilles"
 		}
 
 	},

@@ -3,11 +3,11 @@ import moment from 'moment';
 
 Vue.component("AgendaEvent", {
     template:`
-    <li><span :title="description">{{tag}} - {{startDate}}{{location}}
+    <li><div class="icon" v-html="icon" :style="iconStyle" ></div><span :title="description">{{tag}} - {{startDate}}{{location}}
     <br/><span ref="desc" class="description">{{title}}</span></span>
     </li>
     `,
-    props: ['event'],
+    props: ['event', 'bulletColor', 'icon'],
     data: () => {
         return {
         };
@@ -57,6 +57,13 @@ Vue.component("AgendaEvent", {
                 return this.event.tags[0].name+ " ";
             }
             return "";
+        },
+        iconStyle() {
+            if ( this.bulletColor ) {
+                return "color: var("+this.bulletColor+");";
+            } else {
+                return "";
+            }
         }
     },
     mounted: function(){

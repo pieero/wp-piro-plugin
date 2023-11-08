@@ -3,19 +3,22 @@ import dateFormat from "dateformat";
 Vue.component("Agenda", {
     template:`<div>
     <p v-if="edit" >Agenda</p>
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changeNextTitle" @blur="saveTitles" v-if="next_events_by_years.length > 0 || edit" >{{editableNextTitle}}</h3>
-    <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
-    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changePreviousTitle" @blur="saveTitles" v-if="past_events_by_years.length > 0 || edit" >{{editablePreviousTitle}}</h3>
-    <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" />
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changeNextTitle" v-if="next_events_by_years.length > 0 || edit" >{{editableNextTitle}}</h3>
+    <AgendaYear v-for="yevents in next_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" :bulletColor="bulletColor" :icon="icon" />
+    <h3 class="wp-block has-text-align-center wp-block-heading rich-text" :contenteditable="edit" @input="changePreviousTitle" v-if="past_events_by_years.length > 0 || edit" >{{editablePreviousTitle}}</h3>
+    <AgendaYear v-for="yevents in past_events_by_years" :year="yevents[0].start_date_details.year" :events="yevents" v-bind:key="yevents[0].id" :bulletColor="bulletColor" :icon="icon" />
     <p v-if="past_events_by_years.length == 0 && next_events_by_years.length == 0">Aucun evenement! verifiez les tags.</p>
     </div>`,
-    props: ['tags', 'categories', 'nextTitle', 'previousTitle', 'edit'],
+    props: ['tags', 'categories', 'nextTitle', 'previousTitle', 'bulletColor', 'edit' ],
     data: () => {
         return {
             past_events : [],
             next_events : [],
             editableNextTitle: null,
             editablePreviousTitle: null,
+            editedPreviousTitle: null,
+            editedNextTitle: null,
+            icon: "&#xf058"
         };
     },
     computed: {
@@ -42,20 +45,20 @@ Vue.component("Agenda", {
     },
     methods: {
         emitSaveTitles() {
-            this.$emit("titleSaved", {next: this.nextTitle, prev: this.previousTitle});
+            this.$emit("titleSaved", {next: this.editedNextTitle, prev: this.editedPreviousTitle});
         },
         changeNextTitle(inputEvent) {
-            this.nextTitle = inputEvent.currentTarget.textContent;
+            this.editedNextTitle = inputEvent.currentTarget.textContent;
             this.emitSaveTitles();
         },
         changePreviousTitle(inputEvent) {
-            this.previousTitle = inputEvent.currentTarget.textContent;
+            this.editedPreviousTitle = inputEvent.currentTarget.textContent;
             this.emitSaveTitles();
         },
-        saveTitles() {
-            this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
-            this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";    
-        },
+        /*saveTitles() {
+            this.editedNextTitle = this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
+            this.editedPreviousTitle = this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";    
+        },*/
         matchTag(event) {
             if ( this.tag_list?.length > 0 ) {
                 for(var jt=0; jt < event.tags.length; ++jt) {
@@ -135,7 +138,7 @@ Vue.component("Agenda", {
     },
     mounted: function(){
         this.fetchEvents();
-        this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
-        this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";
+        this.editedNextTitle = this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
+        this.editedPreviousTitle = this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";
     }
 });
