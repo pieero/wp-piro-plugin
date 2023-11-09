@@ -19,9 +19,9 @@
       var countdowns = document.querySelectorAll('[class*="wp-block-piro-plugin-countdown"]');
       countdowns.forEach((countdown) => {
         var data = {
-          tag: agenda.attributes?.getNamedItem('tags')?.value,
-          delay: agenda.attributes?.getNamedItem('delay')?.value,
-          categories: agenda.attributes?.getNamedItem('categories')?.value,
+          tag: countdown.attributes?.getNamedItem('tags')?.value,
+          delay: countdown.attributes?.getNamedItem('delay')?.value,
+          categories: countdown.attributes?.getNamedItem('categories')?.value,
         };
         var el = countdown.querySelector("#mount");
         window.mountCountdown(el,data);

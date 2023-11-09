@@ -24,7 +24,7 @@ Vue.component("Countdown", {
         <img decoding="async" fetchpriority="high" width="1024" height="576" :src="image" alt="" class="wp-image-95" />
     </figure>
     </div>`,
-    props: ['tags', 'category', 'delay', 'edit'],
+    props: ['tags', 'categories', 'delay', 'edit'],
     data: () => {
         return {
             next_event : null,
@@ -36,7 +36,7 @@ Vue.component("Countdown", {
     },
     computed: {
         tag_list() {
-            if ( this.tags.trim().length > 0 ) {
+            if ( this.tags?.trim().length > 0 ) {
                 return this.tags.split(/[\s,]+/).map((v) => v.trim());
             } else {
                 return [];
@@ -109,11 +109,11 @@ Vue.component("Countdown", {
             }
             return true;
         },
-        matchCategory(event) {
-            if ( this.category?.length > 0 ) {
+        matchCategories(event) {
+            if ( this.categories?.length > 0 ) {
                 for(var jt=0; jt < event.categories.length; ++jt) {
-                    const category = event.categories[jt];
-                    if( category.slug === this.category ) {
+                    const categories = event.categories[jt];
+                    if( categories.slug === this.categories ) {
                         return true;
                     }
                 }
@@ -121,34 +121,25 @@ Vue.component("Countdown", {
             }
             return true;
         },
-        fetchNextEvent() {
-            var mnow = moment();
-            var hier = moment().subtract(1, "days").format("YYYY-MM-DD");
-            var maintenant = mnow.format("YYYY-MM-DD HH:mm:ss");
-            var url = '/wp-json/tribe/events/v1/events?starts_after='+hier;
-            if ( this.category?.length > 0 ) {
-                url += '&categories='+this.category;
-            }
-            if ( this.tag_list.length == 1 ) {
-                url += '&tags='+this.tag_list[0];
-            }
+        filterNextEvent(events) {
+            var tmp_next_event = null;
             var that = this;
-            fetch(url).then((response)=>{
-            return response.json()
-            }).then((data)=>{
-                var tmp_next_event = null;
-                if ( data?.events ) {
-                    var next_events = data.events.filter((e)=> 
-                    e.start_date >= maintenant 
-                    && that.matchTag(e) 
-                    //&& that.matchCategory(e)
-                    );
-                    if ( next_events.length > 0 ) {
-                        tmp_next_event = next_events[0];
-                    }
-                } 
-                that.next_event = tmp_next_event;
-            })    
+            if ( events ) {
+                var mnow = moment();
+                var maintenant = mnow.format("YYYY-MM-DD HH:mm:ss");
+                var next_events = events.filter((e)=> 
+                e.start_date >= maintenant 
+                && that.matchTag(e) 
+                && that.matchCategories(e)
+                );
+                if ( next_events.length > 0 ) {
+                    tmp_next_event = next_events[0];
+                }
+            } 
+            return tmp_next_event;
+        },
+        fetchNextEvent() {
+            this.next_event = this.filterNextEvent(piro_tce_events);
         }
     },
     mounted: function(){

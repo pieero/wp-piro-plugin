@@ -55,10 +55,6 @@ Vue.component("Agenda", {
             this.editedPreviousTitle = inputEvent.currentTarget.textContent;
             this.emitSaveTitles();
         },
-        /*saveTitles() {
-            this.editedNextTitle = this.editableNextTitle = this.nextTitle ? this.nextTitle : "Prochainement";
-            this.editedPreviousTitle = this.editablePreviousTitle = this.previousTitle ? this.previousTitle : "Evénements passés";    
-        },*/
         matchTag(event) {
             if ( this.tag_list?.length > 0 ) {
                 for(var jt=0; jt < event.tags.length; ++jt) {
@@ -106,35 +102,21 @@ Vue.component("Agenda", {
             var retVal = Array.from(years.values());
             return retVal;
         },
+        filterEvents(events) {
+            if ( events ) {
+                var maintenant = dateFormat(Date(), "yyyy-mm-dd HH:MM:ss");
+                const tmp_past_events = events.filter((e)=> e.end_date < maintenant);
+                const tmp_next_events = events.filter((e)=> e.end_date >= maintenant);
+                this.past_events = tmp_past_events;
+                this.next_events = tmp_next_events;
+            } else {
+                this.past_events = [];
+                this.next_events = [];
+            }
+        },
         async fetchEvents(page=1) {
-            var maintenant = dateFormat(Date(), "yyyy-mm-dd HH:MM:ss");
-            var url = '/wp-json/tribe/events/v1/events?starts_after=1990-01-01&page='+page;
-            fetch(url).then((response)=>{
-            return response.json()
-            }).then((data)=>{
-                if ( data?.events ) {
-                    const tmp_past_events = data.events.filter((e)=> e.end_date < maintenant);
-                    const tmp_next_events = data.events.filter((e)=> e.end_date >= maintenant);
-
-                    if ( page == 1 ) {
-                        this.past_events = tmp_past_events;
-                        this.next_events = tmp_next_events;
-                    } else {
-                        this.past_events = this.past_events.concat(tmp_past_events);
-                        this.next_events = this.next_events.concat(tmp_next_events);
-                    }
-                    if( this.past_events.length + this.next_events.length < data.total && page < data.total_pages) {
-                        this.fetchEvents(page+1);
-                    }
-                } else {
-                    if ( page == 1 ) {
-                        this.past_events = [];
-                        this.next_events = [];
-                    }
-                }
-            })
-    
-        }
+            this.filterEvents(piro_tce_events);
+      }
     },
     mounted: function(){
         this.fetchEvents();

@@ -38,7 +38,7 @@ export default function Edit( props ) {
 	registerCountdown(attr.id, props);
 
 	const tags = props.attributes.tags.split(',');
-	const category = props.attributes.category;
+	const categories = props.attributes.categories;
 
 	useEffect(() => {
         PiroCommon.fetchEventMetaData();
@@ -48,8 +48,8 @@ export default function Edit( props ) {
 		props.setAttributes({tags: tagList.join(",")});
 	}
 
-	var saveCategory = function(cat) {
-		props.setAttributes({category: cat});
+	var saveCategories = function(cat) {
+		props.setAttributes({categories: cat});
 	}
 
 	return (
@@ -77,10 +77,10 @@ export default function Edit( props ) {
 				/> )}
 				{ PiroCommon.event_metadata?.category_list && (
 					<SelectControl
-						label={__('Category')}
-						value={ category }
+						label={__('Categories')}
+						value={ categories }
 						options={ PiroCommon.event_metadata?.category_list }
-						onChange={ ( newSize ) => saveCategory( newSize ) }
+						onChange={ ( newSize ) => saveCategories( newSize ) }
 						multiple={false}
 						__nextHasNoMarginBottom
 					/> )}

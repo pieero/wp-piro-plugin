@@ -14,7 +14,7 @@ const piro_plugin_mount_countdowns = function() {
         if( countdown ) {
             var vm = new Vue({
                 el: countdown,
-                template: `<Countdown :delay="delay" :tags="tags" :category="category" id="mount" :edit="true" class="vue-mounted" ></Countdown>`,
+                template: `<Countdown :delay="delay" :tags="tags" :categories="categories" id="mount" :edit="true" class="vue-mounted" ></Countdown>`,
                 data: {
                     id: id,
                     props: props,
@@ -36,12 +36,12 @@ const piro_plugin_mount_countdowns = function() {
                             this.props.setAttributes({tags: val});
                         }
                     },
-                    category: {
+                    categories: {
                         get: function() {
-                            return this.props.attributes.category;
+                            return this.props.attributes.categories;
                         },
                         set: function(val) {
-                            this.props.setAttributes({category: val});
+                            this.props.setAttributes({categories: val});
                         }
                     },
                     delay: {
@@ -58,7 +58,7 @@ const piro_plugin_mount_countdowns = function() {
                         this.props = val;
                         this.delay = this.props.attributes.delay;
                         this.tags = this.props.attributes.tags;
-                        this.category = this.props.attributes.category;
+                        this.categories = this.props.attributes.categories;
                     },
                 },
                 mounted: function(){
@@ -93,13 +93,13 @@ const mountCountdown = function(el,data) {
     var vm = new Vue({
         el: el,
         template: `
-<Countdown id="mount" :delay="delay" :tags="tags" :category="category" class="vue-mounted">
+<Countdown id="mount" :delay="delay" :tags="tags" :categories="categories" class="vue-mounted">
 </Countdown>`,
         data: () => {
             return {
                 delay: data.delay,
                 tags: data.tags,
-                category: data.category, 
+                categories: data.categories, 
             };
         }
     });
